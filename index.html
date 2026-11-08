@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Tài Liệu Ôn Thi - Khóa XII</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050714;
+            --card-bg: rgba(20, 26, 50, 0.65);
+            --card-border: rgba(147, 197, 253, 0.18);
+            --accent-gold: #f59e0b;
+            --accent-cyan: #38bdf8;
+            --accent-purple: #c084fc;
+            --accent-emerald: #10b981;
+            --accent-rose: #fb7185;
+            --accent-indigo: #6366f1;
+            --text-main: #f3f4f6;
+            --text-sub: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2.5rem 1rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Phông nền Vũ Trụ (Cosmic Background) */
+        .space-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 45%),
+                radial-gradient(circle at 80% 30%, rgba(56, 189, 248, 0.2), transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(192, 132, 252, 0.22), transparent 50%),
+                linear-gradient(to bottom, #03040c, #080d24);
+        }
+
+        /* Hiệu ứng các vì sao twinkling */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(2px 2px at 35px 45px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 95px 140px, rgba(255,255,255,0.85), rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 150px 70px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 220px 180px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+                        radial-gradient(1.5px 1.5px at 300px 250px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 370px 330px, rgba(147, 197, 253, 0.8), rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 350px 350px;
+            opacity: 0.65;
+            animation: starsAnimation 100s linear infinite;
+        }
+
+        @keyframes starsAnimation {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
+        /* Header Header */
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 2.5rem 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .badge-main {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(56, 189, 248, 0.25));
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            padding: 0.4rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 30%, #c084fc 70%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.6rem;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 1.05rem;
+        }
+
+        /* Grid hiển thị các Môn Học */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .subject-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--card-accent, var(--accent-cyan));
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
+        .card-header-icon {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .subject-card h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subject-card p {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .action-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--card-accent, var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s ease;
+        }
+
+        .subject-card:hover .action-link {
+            gap: 0.75rem;
+        }
+
+        /* Styling màu sắc riêng cho từng môn */
+        .theme-viet { --card-accent: #38bdf8; }
+        .theme-lspg { --card-accent: #f59e0b; }
+        .theme-lsvn { --card-accent: #fb7185; }
+        .theme-klph { --card-accent: #10b981; }
+        .theme-ktb  { --card-accent: #c084fc; }
+        .theme-hanco{ --card-accent: #6366f1; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3.5rem;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="space-bg"></div>
+    <div class="stars"></div>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <span class="badge-main">Hệ Thống Ôn Tập Thông Minh</span>
+            <h1>CỔNG TÀI LIỆU ÔN THI TỔNG HỢP</h1>
+            <p class="subtitle">Truy cập nhanh danh mục các bài giảng, tài liệu và đề cương ôn tập các môn học</p>
+        </header>
+
+        <!-- Grid các Môn Học -->
+        <div class="subjects-grid">
+
+            <!-- 1. Tiếng Việt Thực Hành -->
+            <a href="https://lelevietnam99.github.io/TIENG_VIET_THUC_HANH/" target="_blank" class="subject-card theme-viet">
+                <div>
+                    <div class="card-header-icon">
+                        <div class="icon-box">✍️</div>
+                        <span class="card-tag" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Ngôn Ngữ</span>
+                    </div>
+                    <h2>Tiếng Việt Thực Hành</h2>
+                    <p>Tài liệu luyện tập, quy chuẩn văn bản và bài tập thực hành tiếng Việt.</p>
+                </div>
+                <div class="action-link">
+                    Truy cập môn học <span>➔</span>
+                </div>
+            </a>
+
+            <!-- 2. Lịch Sử Phật Giáo Việt Nam -->
+            <a href="https://lelevietnam99.github.io/LSPGVN_K12_GK_I/" target="_blank" class="subject-card theme-lspg">
+                <div>
+                    <div class="card-header-icon">
+                        <div class="icon-box">🪷</div>
+                        <span class="card-tag" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">Phật Học</span>
+                    </div>
+                    <h2>Lịch Sử Phật Giáo VN</h2>
+                    <p>Đề cương & bài giảng Lịch sử Phật giáo Việt Nam Khóa XII (Giữa Kỳ I).</p>
+                </div>
+                <div class="action-link">
+                    Truy cập môn học <span>➔</span>
+                </div>
+            </a>
+
+            <!-- 3. Lịch Sử Việt Nam -->
+            <a href="https://lelevietnam99.github.io/LSVN_K12_GKI/" target="_blank" class="subject-card theme-lsvn">
+                <div>
+                    <div class="card-header-icon">
+                        <div class="icon-box">📜</div>
+                        <span class="card-tag" style="background: rgba(251, 113, 133, 0.15); color: #fb7185;">Lịch Sử</span>
+                    </div>
+                    <h2>Lịch Sử Việt Nam</h2>
+                    <p>Tổng hợp tiến trình lịch sử dân tộc và nội dung ôn tập Khóa XII Giữa Kỳ I.</p>
+                </div>
+                <div class="action-link">
+                    Truy cập môn học <span>➔</span>
+                </div>
+            </a>
+
+            <!-- 4. Khái Luận Phật Học -->
+            <a href="https://lelevietnam99.github.io/KLPH_K12_GK_I/" target="_blank" class="subject-card theme-klph">
+                <div>
+                    <div class="card-header-icon">
+                        <div class="icon-box">☸️</div>
+                        <span class="card-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">Phật Học</span>
+                    </div>
+                    <h2>Khái Luận Phật Học</h2>
+                    <p>Bộ thẻ học 6 câu trọng tâm, bài làm mẫu & đề cương TS. Thích Viên Trí.</p>
+                </div>
+                <div class="action-link">
+                    Truy cập môn học <span>➔</span>
+                </div>
+            </a>
+
+            <!-- 5. Kinh Trung Bộ -->
+            <a href="https://lelevietnam99.github.io/KINHTRUNGBO_K11/" target="_blank" class="subject-card theme-ktb">
+                <div>
+                    <div class="card-header-icon">
+                        <div class="icon-box">📖</div>
+                        <span class="card-tag" style="background: rgba(192, 132, 252, 0.15); color: #c084fc;">Kinh Tạng</span>
+                    </div>
+                    <h2>Kinh Trung Bộ</h2>
+                    <p>Tài liệu nghiên cứu, tóm tắt và phân tích hệ thống Kinh Trung Bộ Khóa XI.</p>
+                </div>
+                <div class="action-link">
+                    Truy cập môn học <span>➔</span>
+                </div>
+            </a>
+
+            <!-- 6. Hán Cổ -->
+            <a href="https://lelevietnam99.github.io/HANCO-GIUA-HOC-KI-1/" target="_blank" class="subject-card theme-hanco">
+                <div>
+                    <div class="card-header-icon">
+                        <div class="icon-box">⛩️</div>
+                        <span class="card-tag" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">Hán Nôm</span>
+                    </div>
+                    <h2>Hán Cổ</h2>
+                    <p>Từ vựng, ngữ pháp và bài dịch Hán Cổ chuẩn bị cho thi Giữa Học Kỳ 1.</p>
+                </div>
+                <div class="action-link">
+                    Truy cập môn học <span>➔</span>
+                </div>
+            </a>
+
+        </div>
+
+        <footer>
+            Cổng Học Tập Vũ Trụ · Chúc bạn ôn tập tốt và đạt kết quả thi cao nhất!
+        </footer>
+
+    </div>
+
+</body>
+</html>
